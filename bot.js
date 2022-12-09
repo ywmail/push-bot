@@ -28,6 +28,9 @@ let sleep = function () {
 bot = WechatyBuilder.build({
     name: "bot", // generate xxxx.memory-card.json and save login data for the next login
     puppet: "wechaty-puppet-wechat",
+    puppetOptions: {
+        uos: true  // 开启uos协议
+    },
 });
 
 // let bot = new PuppetWechat4u();
