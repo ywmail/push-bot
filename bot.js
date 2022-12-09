@@ -247,7 +247,7 @@ fastify.post(
 
 let start = async function () {
     await bot.start();
-    await fastify.listen({port : process.env.PORT || 3000});
+    await fastify.listen({port : process.env.PORT || 3000, host: '0.0.0.0'});
     return console.log("listen " + process.env.PORT || 3000);
 };
 
