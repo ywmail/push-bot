@@ -9,9 +9,9 @@
     "author": "tans",
     "license": "ISC",
     "dependencies": {
+        "@fastify/rate-limit": "^7.6.0",
         "dotenv": "^10.0.0",
         "fastify": "^4.7.0",
-        "@fastify/rate-limit": "^7.6.0",
         "file-box": "^0.16.8",
         "hot-import": "^0.2.14",
         "lodash": "^4.17.21",
@@ -20,6 +20,6 @@
         "uuid": "^8.3.2",
         "wechaty": "^1.20.2",
         "wechaty-puppet": "^1.10.2",
-        "wechaty-puppet-wechat4u": "^1.10.2"
+        "wechaty-puppet-wechat": "^1.18.4"
     }
 }
