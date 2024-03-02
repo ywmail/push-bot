@@ -12,8 +12,8 @@ let fastify = require("fastify")({
     logger: true,
 });
 
-let UserDB = Datastore.create("./users.db");
-let RoomDB = Datastore.create("./rooms.db");
+let UserDB = Datastore.create("./data/users.db");
+let RoomDB = Datastore.create("./data/rooms.db");
 
 // let { PuppetWechat4u } = require("wechaty-puppet-wechat4u");
 
