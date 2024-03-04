@@ -15,9 +15,11 @@ let fastify = require("fastify")({
 let UserDB = Datastore.create("./data/users.db");
 let RoomDB = Datastore.create("./data/rooms.db");
 
-// let { PuppetWechat4u } = require("wechaty-puppet-wechat4u");
+let { PuppetWechat4u } = require("wechaty-puppet-wechat4u");
 
 // let { EventLogger } = require("wechaty-plugin-contrib");
+
+const puppet = new PuppetWechat4u();
 
 let sleep = function () {
     return new Promise(function (resolve) {
@@ -27,17 +29,13 @@ let sleep = function () {
 
 bot = WechatyBuilder.build({
     name: "bot", // generate xxxx.memory-card.json and save login data for the next login
-    puppet: "wechaty-puppet-wechat4u",
-    puppetOptions: {
-        uos: true  // 开启uos协议
-    },
+    puppet
 });
 
 // let bot = new PuppetWechat4u();
 bot.on("scan", function (qrcode) {
-    console.log(qrcode);
     if (qrcode) {
-        return require("qrcode-terminal").generate(qrcode, {
+        require("qrcode-terminal").generate(qrcode, {
             small: true,
         });
     }
@@ -158,11 +156,18 @@ fastify.get(
                 msg: "token not exists",
             };
         }
-        contact = bot.Contact.load(user.contactid);
-        contact.say(msg);
-        return {
-            status: true,
-        };
+        try {
+            contact = bot.Contact.load(user.contactid);
+            contact.say(msg);
+            return {
+                status: true,
+            };    
+        } catch (error) {
+            return {
+                status: false,
+                error: error
+            }
+        }
     }
 );
 
@@ -246,7 +251,10 @@ fastify.post(
 );
 
 let start = async function () {
-    await bot.start();
+    await bot.start()
+        .then(() => console.log("bot start"))
+        .catch(console.error);
+
     await fastify.listen({port : process.env.PORT || 3000, host: '0.0.0.0'});
     return console.log("listen " + process.env.PORT || 3000);
 };
