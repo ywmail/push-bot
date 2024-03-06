@@ -84,24 +84,23 @@ bot
   .on("error", console.error);
 
 let sendWebhook = async function (contact) {
-  var _send, token, user;
-  user = await UserDB.findOne({
-    contactid: contact.id,
-  });
-  _send = async function (token) {
+  var token, alias;
+
+  try {
+    alias = await contact.alias();
+    if (alias === null) {
+      alias = contact.name().slice(0, 8) + uuid().slice(0, 8);
+      await contact.alias(alias);
+    }
+
+    token = alias.slice(-8);
+
     return await contact.say(
       `发送地址: ${process.env.DOMAIN}/send/${token}?msg=xxx`
     );
-  };
-  if (user) {
-    return await _send(user.token);
+  } catch (error) {
+    console.log(`failed to set ${contact.name()}'s alias!`);
   }
-  token = uuid();
-  await UserDB.insert({
-    contactid: contact.id,
-    token: token,
-  });
-  return await _send(token);
 };
 
 let sendRoomWebHook = async function (contact, room) {
