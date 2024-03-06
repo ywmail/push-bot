@@ -16,6 +16,7 @@ let UserDB = Datastore.create("./data/users.db");
 let RoomDB = Datastore.create("./data/rooms.db");
 
 let { PuppetWechat4u } = require("wechaty-puppet-wechat4u");
+const { Contact } = require("wechaty-puppet/types");
 
 // let { EventLogger } = require("wechaty-plugin-contrib");
 
@@ -84,22 +85,18 @@ bot
   .on("error", console.error);
 
 let sendWebhook = async function (contact) {
-  var token, alias;
+  var token, name;
 
   try {
-    alias = await contact.alias();
-    if (alias === null) {
-      alias = contact.name().slice(0, 8) + uuid().slice(0, 8);
-      await contact.alias(alias);
-    }
+    name = await contact.name();
 
-    token = alias.slice(-8);
+    token = Buffer.from(name).toString("base64");
 
     return await contact.say(
       `发送地址: ${process.env.DOMAIN}/send/${token}?msg=xxx`
     );
   } catch (error) {
-    console.log(`failed to set ${contact.name()}'s alias!`);
+    console.log(error);
   }
 };
 
@@ -144,20 +141,19 @@ fastify.get(
     },
   },
   async function (request, reply) {
-    var contact, msg, token, user;
+    var contact, msg, token, name;
     ({ msg } = request.query);
     ({ token } = request.params);
-    user = await UserDB.findOne({
-      token: token,
-    });
-    if (!user) {
+    name = Buffer.from(token, "base64").toString("utf8");
+    console.log(token, name);
+    contact = await bot.Contact.find({ name: name });
+    if (!contact) {
       return {
         status: false,
         msg: "token not exists",
       };
     }
     try {
-      contact = bot.Contact.load(user.contactid);
       contact.say(msg);
       return {
         status: true,
