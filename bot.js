@@ -144,9 +144,10 @@ fastify.get(
     var contact, msg, token, name;
     ({ msg } = request.query);
     ({ token } = request.params);
+
     name = Buffer.from(token, "base64").toString("utf8");
-    console.log(token, name);
     contact = await bot.Contact.find({ name: name });
+
     if (!contact) {
       return {
         status: false,
@@ -154,7 +155,7 @@ fastify.get(
       };
     }
     try {
-      contact.say(msg);
+      await contact.say(msg);
       return {
         status: true,
       };
@@ -213,13 +214,14 @@ fastify.post(
     },
   },
   async function (request, reply) {
-    var contact, image, msg, token, user;
+    var contact, image, msg, token, name;
     ({ msg } = request.body);
     ({ token } = request.params);
-    user = await UserDB.findOne({
-      token: token,
-    });
-    if (!user) {
+
+    name = Buffer.from(token, "base64").toString("utf8");
+    contact = await bot.Contact.find({ name: name });
+
+    if (!contact) {
       return {
         status: false,
         msg: "token not exists",
