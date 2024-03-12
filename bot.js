@@ -215,8 +215,21 @@ fastify.post(
   },
   async function (request, reply) {
     var contact, image, msg, token, name;
-    ({ msg } = request.body);
     ({ token } = request.params);
+    ({ property = "msg" } = request.query);
+
+    msg = request.body;
+    const dynamicProperties = property.split("."); // 动态属性层级，可以根据需要进行调整
+    for (const prop of dynamicProperties) {
+      if (msg.hasOwnProperty(prop)) {
+        msg = msg[prop];
+      } else {
+        console.log(
+          `Dynamic property ${property} is not present in the request body`
+        );
+        // 如果遇到不存在的属性，可以根据需要进行处理
+      }
+    }
 
     name = Buffer.from(token, "base64").toString("utf8");
     contact = await bot.Contact.find({ name: name });
