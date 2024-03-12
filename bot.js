@@ -216,18 +216,22 @@ fastify.post(
   async function (request, reply) {
     var contact, image, msg, token, name;
     ({ token } = request.params);
-    ({ property = "msg" } = request.query);
 
-    msg = request.body;
-    const dynamicProperties = property.split("."); // 动态属性层级，可以根据需要进行调整
-    for (const prop of dynamicProperties) {
-      if (msg.hasOwnProperty(prop)) {
-        msg = msg[prop];
-      } else {
-        console.log(
-          `Dynamic property ${property} is not present in the request body`
-        );
-        // 如果遇到不存在的属性，可以根据需要进行处理
+    if (request.query.msg) {
+      msg = request.query.msg;
+    } else {
+      msg = request.body;
+      ({ property = "msg" } = request.query);
+      const dynamicProperties = property.split("."); // 动态属性层级，可以根据需要进行调整
+      for (const prop of dynamicProperties) {
+        if (msg.hasOwnProperty(prop)) {
+          msg = msg[prop];
+        } else {
+          console.log(
+            `Dynamic property ${property} is not present in the request body`
+          );
+          // 如果遇到不存在的属性，可以根据需要进行处理
+        }
       }
     }
 
