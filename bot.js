@@ -227,7 +227,7 @@ fastify.post(
         msg: "token not exists",
       };
     }
-    contact = bot.Contact.load(user.contactid);
+
     if (typeof msg === "string") {
       await contact.say(msg);
       return {
