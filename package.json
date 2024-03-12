@@ -5,7 +5,8 @@
     "main": "bot.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "docker build -t ywmail/push-bot ."
+        "build": "docker build -t ywmail/push-bot .",
+        "publish": "docker run -d --restart=unless-stopped -v D:\\docker\\push-bot:/home/node/app/data -v D:\\docker\\push-bot\\bot.memory-card.json:/home/node/app/bot.memory-card.json -p 3001:3001 --name=push-bot ywmail/push-bot:latest"
     },
     "author": "tans",
     "license": "ISC",
