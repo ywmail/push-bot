@@ -15,12 +15,12 @@ let fastify = require("fastify")({
 let UserDB = Datastore.create("./data/users.db");
 let RoomDB = Datastore.create("./data/rooms.db");
 
-let { PuppetWechat4u } = require("wechaty-puppet-wechat4u");
+// let { PuppetWechat4u } = require("wechaty-puppet-wechat4u");
 const { Contact } = require("wechaty-puppet/types");
 
 // let { EventLogger } = require("wechaty-plugin-contrib");
 
-const puppet = new PuppetWechat4u();
+// const puppet = new PuppetWechat4u();
 
 let sleep = function () {
   return new Promise(function (resolve) {
@@ -30,7 +30,10 @@ let sleep = function () {
 
 bot = WechatyBuilder.build({
   name: "bot", // generate xxxx.memory-card.json and save login data for the next login
-  puppet,
+  puppet: "wechaty-puppet-xp",
+  puppetOptions: {
+    version: "3.9.2.23",
+  }
 });
 
 // let bot = new PuppetWechat4u();

@@ -22,6 +22,7 @@
         "uuid": "^9.0.1",
         "wechaty": "^1.20.2",
         "wechaty-puppet": "^1.20.2",
-        "wechaty-puppet-wechat4u": "^1.14.14"
+        "wechaty-puppet-wechat4u": "^1.14.14",
+        "wechaty-puppet-xp": "^1.13.12"
     }
 }
